@@ -1,11 +1,21 @@
-from typing import Any
 from django.shortcuts import render, HttpResponse
 
+
 def index(request) -> HttpResponse:
-    return HttpResponse('Привет. Это наша главная страница. Добро пожаловать мой друг!))')
+    main = "Это главная страница проекта Yatube"
+    context = {
+        'main': main
+    }
+    template = 'posts/index.html'
+    return render(request, template, context)
 
 def group_posts(request) -> HttpResponse:
-    return HttpResponse('Вот здесь будут все ваши и наши блоги')
+    group = "Здесь будет информация о группах проекта Yatube"
+    context = {
+        'group': group
+    }
+    template = 'posts/group_list.html'
+    return render(request, template, context)
 
 
 def group_posts_detal(request, slug: str) -> HttpResponse:
