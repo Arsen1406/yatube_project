@@ -1,22 +1,22 @@
 from django.shortcuts import render, HttpResponse
 
 
-def index(request) -> HttpResponse:
-    main = "Это главная страница проекта Yatube"
-    context = {
+def index(request: str) -> HttpResponse:
+    main: str = "Это главная страница проекта Yatube"
+    context: dict = {
         'main': main
     }
-    template = 'posts/index.html'
+    template: str = 'posts/index.html'
     return render(request, template, context)
 
 def group_posts(request) -> HttpResponse:
-    group = "Здесь будет информация о группах проекта Yatube"
-    context = {
+    group: str = "Здесь будет информация о группах проекта Yatube"
+    context: dict = {
         'group': group
     }
-    template = 'posts/group_list.html'
+    template: str = 'posts/group_list.html'
     return render(request, template, context)
 
 
-def group_posts_detal(request, slug: str) -> HttpResponse:
+def group_posts_detal(request: str, slug: str) -> HttpResponse:
     return HttpResponse(f'А это пост {slug}')
