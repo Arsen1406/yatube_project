@@ -1,5 +1,5 @@
-from django.shortcuts import render, HttpResponse
-from .models import Post
+from django.shortcuts import render, HttpResponse, get_object_or_404
+from .models import Post, Group
 
 
 def index(request: str) -> HttpResponse:
@@ -13,14 +13,12 @@ def index(request: str) -> HttpResponse:
     return render(request, template, context)
 
 
-def group_posts(request) -> HttpResponse:
-    group: str = "Здесь будет информация о группах проекта Yatube"
+def group_posts(request: str, slug: str) -> HttpResponse:
+    group = get_object_or_404(Group, slug=slug)
+    posts = Post.objects.filter(group=group).order_by('-pub_date')[:10]
     context: dict = {
-        'group': group
+        'group': group,
+        'posts': posts,
     }
     template: str = 'posts/group_list.html'
     return render(request, template, context)
-
-
-def group_posts_detal(request: str, slug: str) -> HttpResponse:
-    return HttpResponse(f'А это пост {slug}')
