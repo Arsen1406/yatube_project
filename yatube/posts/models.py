@@ -1,12 +1,12 @@
-from django.db import models
+from django.db import models  # type: ignore
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
 
 class Group(models.Model):
-    title = models.CharField(max_length=30)
-    slug = models.SlugField()
+    title = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True)
     description = models.TextField(max_length=300)
 
     def __str__(self):
@@ -25,5 +25,6 @@ class Post(models.Model):
         Group,
         blank=True,
         null=True,
-        on_delete=models.CASCADE
+        related_name='posts',
+        on_delete=models.SET_NULL
     )

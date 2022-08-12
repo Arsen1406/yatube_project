@@ -1,67 +1,18 @@
-{% load static %}
-<!DOCTYPE html> <!-- Используется html 5 версии -->
-<html lang="ru"> <!-- Язык сайта - русский -->
-  <head>
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <meta charset="utf-8"> <!-- Кодировка сайта -->
-    <!-- Сайт готов работать с мобильными устройствами -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Загружаем фав-иконки -->
-    <link rel="icon" href="{% static 'img/fav/favicon.ico' %}">
-    <link rel="apple-touch-icon" sizes="180x180" href="img/fav/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="img/fav/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="img/fav/favicon-16x16.png">
-    <meta name="msapplication-TileColor" content="#000">
-    <meta name="theme-color" content="#ffffff">
-    <!-- Подключен файл со стандартными стилями бустрап -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <title>{{ main }}</title>
-  </head>
-  <body>
-    <header>
-      <!-- Использованы классы бустрапа для создания типовой навигации с логотипом -->
-      <!-- В дальнейшем тут будет создано полноценное меню -->
-      <nav class="navbar navbar-light" style="background-color: lightskyblue">
-        <div class="container">
-          <a class="navbar-brand" href="posts:index.html">
-            <img src="{% static 'img/logo.png' %}" width="30" height="30" class="d-inline-block align-top" alt="">
-            <!-- тег span используется для добавления нужных стилей отдельным участкам текста -->
-            <span style="color:red">Ya</span>tube
-          </a>
-        </div>
-      </nav>
-    </header>
-    <main>
-      <!-- класс py-5 создает отступы сверху и снизу блока -->
-      <div class="container py-5">
-        <h1>Последние обновления на сайте</h1>
-        <article>
-          {% for post in posts %}
-          <ul>
-            <li>
-              Автор: {{ post.author.get_full_name }}
-            </li>
-            <li>
-              Дата публикации: {{ post.pub_date|date:"d E Y" }}
-            </li>
-          </ul>
-          <p>{{ post.text }}</p>
-          {% if post.group %}
-          <a href="{% url 'posts:group_posts' post.group.slug %}">все записи группы</a>
-          {% endif %}
-          {% if not forloop.last %}<hr>{% endif %}
-          {% endfor %}
-        </article>
-        <!-- под последним постом нет линии -->
-      </div>
-    </main>
-    <!-- Использованы классы бустрапа: -->
-    <!-- border-top: создаёт тонкую линию сверху блока -->
-    <!-- text-center: выравнивает текстовые блоки внутри блока по центру -->
-    <!-- py-3: контент внутри размещается с отступом сверху и снизу -->
-    <footer class="border-top text-center py-3">
-      <!-- тег span используется для добавления нужных стилей отдельным участкам текста -->
-      <p>© 2020 Copyright <span style="color:red">Ya</span>tube</p>
-    </footer>
-  </body>
-</html>
+{% extends 'base.html' %}
+{% block title %}
+<title>{{ main }}</title>
+{% endblock %}
+{% block content %}
+<h1>Последние обновления на сайте</h1>
+{% for post in posts %}
+<ul>
+  <li>Автор: {{ post.author.get_full_name }}</li>
+  <li>Дата публикации: {{ post.pub_date|date:"d E Y" }}</li>
+</ul>
+<p>{{ post.text }}</p>
+{% if post.group %}
+<a href="{% url 'posts:group_posts' post.group.slug %}">все записи группы</a>
+{% endif %}
+{% if not forloop.last %}<hr>{% endif %}
+{% endfor %}
+{% endblock %} 
