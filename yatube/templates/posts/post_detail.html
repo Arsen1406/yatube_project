@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}{{ post }}{% endblock %}
+{% block content %}
+  <main>
+    <div class="row">
+      <aside class="col-12 col-md-3">
+      <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        Дата публикации: {{ post.pub_date|date:"d E Y" }}
+      </li>
+      {% if post.group %}
+      <li class="list-group-item">
+        Группа: {{ post.group }}<br>
+        <a href="{% url 'posts:group' post.group.slug %}">все записи группы</a>
+          {% endif %}
+        </a>
+      </li>
+      <li class="list-group-item">
+        Автор: {{ post.author.first_name }} {{ post.author.last_name }}
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <span >Всего постов автора: {{ count.pk__count }} </span>
+      </li>
+      <li class="list-group-item">
+        <a href="{% url 'posts:profile' post.author.username %}">
+          все посты пользователя
+        </a>
+        {% if user == post.author %}
+        <a href="{% url 'posts:edit' post.id %}">редактировать пост</a><br>
+        {% endif %}
+      </li>
+      </ul>
+      </aside>
+      <article class="col-12 col-md-9">
+        <p>{{ post.text }}</p>
+      </article>
+    </div>
+
+  </main>
+{% endblock %}

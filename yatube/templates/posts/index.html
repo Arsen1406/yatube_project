@@ -1,18 +1,21 @@
 {% extends 'base.html' %}
-{% block title %}
-<title>{{ main }}</title>
-{% endblock %}
+{% block title %}{{ main }}{% endblock %}
 {% block content %}
-<h1>Последние обновления на сайте</h1>
-{% for post in posts %}
-<ul>
-  <li>Автор: {{ post.author.get_full_name }}</li>
-  <li>Дата публикации: {{ post.pub_date|date:"d E Y" }}</li>
-</ul>
-<p>{{ post.text }}</p>
-{% if post.group %}
-<a href="{% url 'posts:group_posts' post.group.slug %}">все записи группы</a>
-{% endif %}
-{% if not forloop.last %}<hr>{% endif %}
-{% endfor %}
+  <h1>Последние обновления на сайте</h1>
+  {% for post in page_obj %}
+    <ul>
+      <li>Автор: {{ post.author.get_full_name }} <a href="{% url 'posts:profile' post.author %}">все посты пользователя</a><br></li>
+      <li>Дата публикации: {{ post.pub_date|date:"d E Y" }}</li>
+    </ul>
+    <p>{{ post.text }}</p>
+    <a href="{% url 'posts:post_detail' post.id %}">подробная информация</a><br>
+    {% if user == post.author %}
+    <a href="{% url 'posts:edit' post.id %}">редактировать пост</a><br>
+    {% endif %}
+    {% if post.group %}
+      <a href="{% url 'posts:group' post.group.slug %}">все записи группы</a>
+    {% endif %}
+    {% if not forloop.last %}<hr>{% endif %}
+  {% endfor %}
+  {% include 'posts/includes/paginator.html' %}
 {% endblock %} 
