@@ -1,18 +1,16 @@
-from django.core.paginator import Paginator
-from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.utils import timezone
 from .models import Post, Group, User
 from .forms import PostForm
+from .ulits import get_paginated_post
 
 
 def index(request):
     main = "Последние обновления на сайте"
     post_list = Post.objects.order_by('-pub_date')
-    paginator = Paginator(post_list, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    page_obj = get_paginated_post(request, post_list)
     context = {
         'page_obj': page_obj,
         'main': main
@@ -24,9 +22,7 @@ def index(request):
 def group_posts(request, slug):
     group = get_object_or_404(Group, slug=slug)
     posts = Post.objects.filter(group=group).order_by('-pub_date')
-    paginator = Paginator(posts, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    page_obj = get_paginated_post(request, posts)
     context = {
         'page_obj': page_obj,
         'group': group,
@@ -41,9 +37,7 @@ def profile(request, username):
     posts = Post.objects.filter(author=author).order_by('-pub_date')
     count = Post.objects.filter(author=author).aggregate(Count('pk'))
     posts_other = Post.objects.exclude(author=author)
-    paginator = Paginator(posts, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    page_obj = get_paginated_post(request, posts)
     context = {
         'page_obj': page_obj,
         'posts_other': posts_other,
@@ -70,25 +64,20 @@ def post_detail(request, post_id):
 
 @login_required
 def post_create(request):
-    is_edit = False
     group = Group.objects.all()
     user = request.user
     main = 'Создать пост от имени'
-    if request.method == 'POST':
-        form = PostForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.pub_date = timezone.now()
-            post.save()
-            return HttpResponseRedirect(f'/profile/{user.username}/')
-    else:
-        form = PostForm()
+    form = PostForm(request.POST or None)
+    if form.is_valid():
+        post = form.save(commit=False)
+        post.author = request.user
+        post.save()
+        return redirect('posts:profile', username=user.username)
 
     context = {
         'main': main,
         'user': user,
-        'is_edit': is_edit,
+        'is_edit': False,
         'group': group,
         'form': form
     }
@@ -100,28 +89,27 @@ def post_create(request):
 def post_edit(request, post_id):
     group = Group.objects.all()
     post = get_object_or_404(Post, pk=post_id)
-    form = PostForm(request.POST, instance=post)
     main = 'Редактировать пост'
-    is_edit = True
+    group_set = post.group
     if request.user.id == post.author_id:
-        if request.method == 'POST':
-            form = PostForm(request.POST, instance=post)
-            if form.is_valid():
-                post = form.save(commit=False)
-                post.author = request.user
-                post.pub_date = timezone.now()
-                post.save()
-                return HttpResponseRedirect(f'/posts/{post_id}')
-            else:
-                form = PostForm(instance=post)
+        form = PostForm(request.POST or None, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.pub_date = timezone.now()
+            post.save()
+            return redirect('posts:post_detail', post_id=post_id)
+        else:
+            form = PostForm(instance=post)
     else:
-        return HttpResponseRedirect(f'/posts/{post_id}')
+        return redirect('posts:post_detail', post_id=post_id)
     context = {
+        'group_set': group_set,
         'group': group,
         'main': main,
         'post': post,
         'form': form,
-        'is_edit': is_edit,
+        'is_edit': True,
     }
     template = 'posts/create_post.html'
     return render(request, template, context)

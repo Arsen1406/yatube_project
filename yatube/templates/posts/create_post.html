@@ -35,17 +35,20 @@
                     </label>
                     <select name="group" class="form-control" id="id_group">
                       {% if is_edit %}
-                      {% if post.group %}
-                      <option value="{{ post.group_id }}" selected>{{ post.group }}</option>
-                      {% else %}
-                       <option value="" selected>---------</option>
-                      {% endif %}
-                      {% else %}
-                      <option value="" selected>---------</option>
-                      {% endif %}
-                      {% for gro in group %}
-                      <option value="{{ gro.id }}">{{ gro }}</option>
+                        {% if post.group %}
+                        <option value="{{ post.group_id }}" selected>{{ post.group }}</option>
+                        {% else %}
+                        <option value="" selected>---------</option>
+                        {% endif %}
+                        {% else %}
+                        <option value="" selected>---------</option>
+                        {% endif %}
+                        {% for gro in group %}
+                        {% if group_set != gro %}
+                        <option value="{{ gro.id }}">{{ gro }}</option>
+                        {% endif %}
                       {% endfor %}
+                      
                     </select>
                     <small id="id_group-help" class="form-text text-muted">
                       Группа, к которой будет относиться пост
