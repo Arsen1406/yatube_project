@@ -3,7 +3,7 @@
 {% block content %}
   <div class="container py-5">
   <h1>Все посты пользователя {{ author.first_name }} {{ author.last_name }}</h1>
-  <h3>Всего постов: {{ count.pk__count }}</h3>
+  <h3>Всего постов: {{ author.posts.count }}</h3>
   <article>
   <p>
     {% for post in page_obj %}

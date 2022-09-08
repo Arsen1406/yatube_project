@@ -19,20 +19,22 @@
         Автор: {{ post.author.first_name }} {{ post.author.last_name }}
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
-        <span >Всего постов автора: {{ count.pk__count }} </span>
+        <span >Всего постов автора: {{ post.author.posts.count }} </span>
       </li>
       <li class="list-group-item">
         <a href="{% url 'posts:profile' post.author.username %}">
           все посты пользователя
         </a>
-        {% if user == post.author %}
-        <a href="{% url 'posts:edit' post.id %}">редактировать пост</a><br>
-        {% endif %}
+
+
       </li>
       </ul>
       </aside>
       <article class="col-12 col-md-9">
         <p>{{ post.text }}</p>
+        {% if user == post.author %}
+          <a class="btn btn-primary" href="{% url 'posts:edit' post.id %}">редактировать пост</a>
+        {% endif %}
       </article>
     </div>
 

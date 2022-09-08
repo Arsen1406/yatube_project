@@ -9,3 +9,10 @@ class PostForm(forms.ModelForm):
             'text': 'Текст поста',
             'group': 'Группы',
         }
+        labels = {
+            'group': ('Группа'),
+            'text': ('Текст'),
+        }
+        help_text = {
+            'text': ('Обязательное поле, не должно быть пустым')
+        }
