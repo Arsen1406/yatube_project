@@ -14,6 +14,7 @@ class Group(models.Model):
 
 
 class Post(models.Model):
+    MAX_LENGTH_TEXT = 15
     text = models.TextField(
         verbose_name='Текст поста',
         help_text='Введите текст поста'
@@ -39,4 +40,4 @@ class Post(models.Model):
     )
 
     def __str__(self):
-        return self.text[:400]
+        return self.text[:self.MAX_LENGTH_TEXT]
