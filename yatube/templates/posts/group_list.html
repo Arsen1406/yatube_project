@@ -14,7 +14,7 @@
     Дата публикации: {{ post.pub_date|date:"d E Y" }}
   </li>
   </ul>
-  <p>{{ post.text }}</p>
+  <p>{{ post }}</p>
   <a href="{% url 'posts:post_detail' post.id %}">подробная информация</a><br>
   {% if post.group %}
   <a href="{% url 'posts:group' post.group.slug %}">все записи группы</a>

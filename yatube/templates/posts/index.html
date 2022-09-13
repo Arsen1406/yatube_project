@@ -7,7 +7,7 @@
       <li>Автор: {{ post.author.get_full_name }} <a href="{% url 'posts:profile' post.author %}">все посты пользователя</a><br></li>
       <li>Дата публикации: {{ post.pub_date|date:"d E Y" }}</li>
     </ul>
-    <p>{{ post.text }}</p>
+    <p>{{ post }}</p>
     <a href="{% url 'posts:post_detail' post.id %}">подробная информация</a><br>
     {% if user == post.author %}
     <a href="{% url 'posts:edit' post.id %}">редактировать пост</a><br>
