@@ -25,9 +25,9 @@
                 {% endif %}
               </div>
               <div class="card-body">
-                <form method="post" action="">{% csrf_token %}
-                <input type="hidden" name="csrfmiddlewaretoken" value="">
-                    {% for field in form %}
+               <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% for field in form %}
                     <div class="form-group row my-3 p-3">
                       <label for="field.id_for_label">
                         {{ field.label }}

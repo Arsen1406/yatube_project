@@ -1,23 +1,25 @@
 from django import forms
-from . models import Post
+from .models import Post, Comment
 
 
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        widgets = {
-            'text': forms.Textarea(attrs={'class': 'card'}),
-            'group': forms.Select(attrs={'class': 'card'})
-        }
-
         fields = {
             'text': 'Текст поста',
             'group': 'Группы',
+            'image': 'Картинка',
         }
-        labels = {
-            'group': ('Группа'),
-            'text': ('Текст'),
+        widgets = {
+            'text': forms.Textarea(attrs={'class': 'card'}),
+            'group': forms.Select(attrs={'class': 'card'}),
         }
-        help_text = {
-            'text': ('Обязательное поле, не должно быть пустым')
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+
+        fields = {
+            'text': 'Текст комментария'
         }

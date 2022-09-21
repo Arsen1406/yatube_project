@@ -1,3 +1,6 @@
+import tempfile
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.conf import settings
 from ..forms import PostForm
 from django.contrib.auth import get_user_model
 from ..models import Post, Group
@@ -11,6 +14,7 @@ class PostCreateFormTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        settings.MEDIA_ROOT = tempfile.mkdtemp(dir=settings.BASE_DIR)
         User.objects.create_user(username='TestUser')
         Group.objects.create(
             title='Тестовая группа',
@@ -81,3 +85,30 @@ class PostCreateFormTests(TestCase):
             }
         ))
         self.assertEqual(Post.objects.count(), count_post)
+
+    def test_post_with_picture(self):
+        small_gif = (
+            b'\x47\x49\x46\x38\x39\x61\x02\x00'
+            b'\x01\x00\x80\x00\x00\x00\x00\x00'
+            b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
+            b'\x00\x00\x00\x2C\x00\x00\x00\x00'
+            b'\x02\x00\x01\x00\x00\x02\x02\x0C'
+            b'\x0A\x00\x3B'
+        )
+        uploaded = SimpleUploadedFile(
+            name='small.gif',
+            content=small_gif,
+            content_type='image/gif'
+        )
+        form_data = {
+            'text': 'Пост с картинкой',
+            'group': 1,
+            'image': uploaded
+        }
+        self.autorized_client.post(
+            reverse('posts:post_create'),
+            data=form_data,
+            follow=True,
+        )
+        post = Post.objects.get(text='Пост с картинкой')
+        self.assertEqual(post.text, 'Пост с картинкой')

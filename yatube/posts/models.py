@@ -38,6 +38,46 @@ class Post(models.Model):
         verbose_name='Группа',
         help_text='Группа, к которой будет относиться пост'
     )
+    image = models.ImageField(
+        verbose_name='Картинка',
+        upload_to='posts/',
+        blank=True
+    )
 
     def __str__(self):
         return self.text[:self.MAX_LENGTH_TEXT]
+
+
+class Comment(models.Model):
+    post = models.ForeignKey(
+        Post,
+        related_name='comments',
+        on_delete=models.CASCADE
+    )
+    author = models.ForeignKey(
+        User,
+        related_name='comments',
+        on_delete=models.CASCADE
+    )
+    text = models.TextField('Текст', help_text='Текст нового комментария')
+    created = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    def __str__(self):
+        return self.text
+
+
+class Follow(models.Model):
+    user = models.ForeignKey(
+        User,
+        related_name='follower',
+        on_delete=models.CASCADE,
+        verbose_name='Пользователь'
+    )
+    author = models.ForeignKey(
+        User,
+        related_name='following',
+        on_delete=models.CASCADE,
+        verbose_name='Автор'
+    )
