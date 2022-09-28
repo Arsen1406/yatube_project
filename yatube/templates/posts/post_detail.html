@@ -36,8 +36,9 @@
         <p>{{ post.text }}</p>
         {% if user == post.author %}
           <a class="btn btn-primary" href="{% url 'posts:edit' post.id %}">редактировать пост</a>
-       <p align="right"><span class="badge text-bg-secondary">{{ post.pub_date|date:"d E Y" }}</span></p>
+
         {% endif %}
+               <p align="right"><span class="badge text-bg-secondary">{{ post.pub_date|date:"d E Y" }}</span></p>
         <!-- Форма добавления комментария -->
 {% load user_filters %}
 
