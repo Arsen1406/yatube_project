@@ -44,15 +44,11 @@ class Post(models.Model):
         blank=True
     )
 
-    class Meta:
-        ordering = ['-pub_date']
-
     def __str__(self):
         return self.text[:self.MAX_LENGTH_TEXT]
 
 
 class Comment(models.Model):
-    MAX_LENGTH_TEXT = 15
     post = models.ForeignKey(
         Post,
         related_name='comments',
@@ -67,34 +63,3 @@ class Comment(models.Model):
     created = models.DateTimeField(
         auto_now_add=True
     )
-
-    class Meta:
-        ordering = ['-created']
-
-    def __str__(self):
-        return self.text[:self.MAX_LENGTH_TEXT]
-
-
-class Follow(models.Model):
-    user = models.ForeignKey(
-        User,
-        related_name='follower',
-        on_delete=models.CASCADE,
-        verbose_name='Пользователь'
-    )
-    author = models.ForeignKey(
-        User,
-        related_name='following',
-        on_delete=models.CASCADE,
-        verbose_name='Автор',
-    )
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=[
-                    'author', 'user'
-                ],
-                name="unique_followers"
-            )
-        ]

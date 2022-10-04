@@ -1,10 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}
-    {% if is_edit %}
-        Редактировать пост
-    {% else %}
-        Новый пост
-    {% endif %}
+  {{ main }} {{ user.get_full_name }}
 {% endblock %}
 {% block content %}
     <style>
