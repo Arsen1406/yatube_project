@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: ${{ github.repository == 'yandex-praktikum/hw02_community' }}
+    if: ${{ github.repository == 'yandex-praktikum/hw05_final' }}
     strategy:
       matrix:
         python-version: [3.7, 3.8, 3.9]
@@ -29,10 +29,9 @@ jobs:
       with:
         repository: ${{ secrets.repository }}
         ssh-key: ${{ secrets.ACCESS_TOKEN }}
-        path: src/
+        path: yatube/
     - name: Lint with flake8 author
       run: |
-        mv src/yatube ./
         # stop the build if there are Python syntax errors or undefined names
         flake8 yatube --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings

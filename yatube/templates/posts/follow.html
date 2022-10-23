@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
-{% block title %}Последние обновления на сайте{% endblock %}
+{% block title %} Ваыши подписки {% endblock %}
 {% block content %}
 {% load thumbnail %}
-    <h1><span class="badge text-bg-primary">Последние обновления на сайте</span></h1>
-    {% include 'posts/includes/switcher.html' %}
-    {% for post in page_obj %}
-<div class="shadow p-3 mb-5 bg-body rounded">
+<h1><span class="badge text-bg-primary">Последние обновления в ленте вашей подписки</span></h1>
+{% include 'posts/includes/switcher.html' %}
+  {% for post in page_obj %}
+  <div class="shadow p-3 mb-5 bg-body rounded">
     <ul>
       <li>Автор: <a href="{% url 'posts:profile' post.author %}">{{ post.author.get_full_name }}</a><br></li>
       <li>Дата публикации: {{ post.pub_date|date:"d E Y" }}</li>
@@ -24,7 +24,7 @@
     {% if post.group %}
       <a href="{% url 'posts:group' post.group.slug %}">все записи группы</a>
     {% endif %}
-    </div>
+ </div>
   {% endfor %}
   {% include 'posts/includes/paginator.html' %}
 {% endblock %}
