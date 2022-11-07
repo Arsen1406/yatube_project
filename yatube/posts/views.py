@@ -1,9 +1,18 @@
 from django.views.decorators.cache import cache_page
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from .serializers import PostSerializer
 from .models import Post, Group, User, Follow
 from .forms import PostForm, CommentForm
 from .ulits import get_paginated_post
+
+
+def get_post(request, pk):
+    if request.method == 'GET':
+        post = Post.objects.get(id=pk)
+        serializer = PostSerializer(post)
+        return JsonResponse(serializer.data)
 
 
 @cache_page(20 * 1, key_prefix='index_page')
@@ -31,8 +40,8 @@ def group_posts(request, slug):
 
 def profile(request, username):
     author = get_object_or_404(User, username=username)
-    posts = Post.objects.filter(author=author)
-    posts_other = Post.objects.exclude(author=author)
+    posts = author.posts.all()
+    posts_other = Post.objects.select_related().exclude(author=author)
     page_obj = get_paginated_post(request, posts)
     following = request.user.is_authenticated and Follow.objects.filter(
         user=request.user, author=author).exists()
