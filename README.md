@@ -10,13 +10,26 @@ Yatube
 - Django 2.2.19
 - Python 3.7.9
 
-Запуск проекта в dev-режиме
-- Установите и активируйте виртуальное окружение
-- Установите зависимости из файла requirements.txt
-  pip install -r requirements.txt
+Клонируйте репозиторий на своё устройство:
+- git clone <ссылка на проект>
 
-- В папке с файлом manage.py выполните команду:
-  python3 manage.py runserver
+Перейдите в директорию:
+- cd api_final_yatube
+
+Разверните виртуальное окружение:
+- python -m venv env или source env/bin/activate 
+
+Обновите pip:
+- python -m pip install --upgrade pip
+
+Установите зависимости из файла requirements.txt:
+- pip install -r requirements.txt
+
+Выполнить миграции:
+- python3 manage.py migrate
+
+Запустить проект:
+- python manage.py runserver
 
 Автор
 Григорян Арсен
